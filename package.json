@@ -1,0 +1,58 @@
+{
+  "name": "@mono/ripple",
+  "version": "1.3.1",
+  "description": "A ripple across your monorepo — smart dev runner that rebuilds and restarts when workspace deps change.",
+  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./monoripple.config.schema.json": "./monoripple.config.schema.json",
+    "./dep-watch.config.schema.json": "./monoripple.config.schema.json"
+  },
+  "bin": {
+    "monoripple": "dist/cli.js",
+    "ripple": "dist/cli.js",
+    "dep-watch": "dist/cli.js",
+    "wokspace-watch": "dist/cli.js",
+    "workspace-watch": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "monoripple.config.schema.json"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc",
+    "dev": "tsx src/cli.ts",
+    "test": "tsx --test test/cli-options.test.ts test/config-resolve.test.ts test/config-validation.test.ts test/logger.test.ts test/write-init.test.ts test/workspace-graph.test.ts test/change-accumulator.test.ts test/integration.test.ts test/build-cache.test.ts test/concurrency.test.ts test/ignore.test.ts test/events.test.ts",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "monorepo",
+    "pnpm",
+    "watch",
+    "workspace",
+    "dev",
+    "ripple",
+    "dep-aware",
+    "turbo-alternative"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "chokidar": "^3.6.0",
+    "fast-glob": "^3.3.3",
+    "picocolors": "^1.1.1",
+    "tree-kill": "^1.2.2",
+    "yaml": "^2.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}

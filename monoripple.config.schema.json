@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://unpkg.com/@mono/ripple/monoripple.config.schema.json",
+  "title": "monoripple.config.json",
+  "description": "Configuration for monoripple — a smart dev runner for Node.js monorepos.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["command"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "app": {
+      "type": "string",
+      "description": "App directory relative to workspace root, or absolute. Omit when the config lives inside the app package."
+    },
+    "command": {
+      "description": "Dev command. String form uses the shell (pipes, expansion). Array form uses direct spawn.",
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+      ]
+    },
+    "debounce": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 60000,
+      "description": "Quiet window before a restart burst fires (ms). Default 200."
+    },
+    "verbose": { "type": "boolean" },
+    "before": {
+      "description": "Hook run before every restart (from repo root). String → shell; array → spawn.",
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+      ]
+    },
+    "beforeDepsOnly": {
+      "type": "boolean",
+      "description": "Only run `before` when the change is outside the app root."
+    },
+    "interactive": {
+      "type": "boolean",
+      "description": "Enable interactive keypress UI. Default: auto (TTY && !CI)."
+    },
+    "strictHooks": {
+      "type": "boolean",
+      "description": "Refuse to run unacked hooks. Default false (warn + continue)."
+    },
+    "killTimeoutMs": {
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 300000,
+      "description": "Graceful shutdown timeout before SIGKILL. Default 10000."
+    },
+    "cooldownMs": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 60000,
+      "description": "Post-build quiet window per package (ms). Default 500."
+    },
+    "buildConcurrency": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 32,
+      "description": "Max parallel customBuilds at the same topo level. Default 4."
+    },
+    "useGitignore": {
+      "type": "boolean",
+      "description": "Apply .gitignore rules to the watcher. Default true."
+    },
+    "noCache": {
+      "type": "boolean",
+      "description": "Disable the input-hash build cache. Default false."
+    },
+    "packages": {
+      "type": "object",
+      "description": "Per-workspace-package overrides keyed by npm name.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "customBuild": {
+            "description": "Hook run when this package's files change. String → shell; array → spawn.",
+            "oneOf": [
+              { "type": "string" },
+              { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+            ]
+          },
+          "customBuildCwd": {
+            "enum": ["package", "workspace-root"],
+            "description": "Working directory. Default `package`."
+          }
+        }
+      }
+    }
+  }
+}
