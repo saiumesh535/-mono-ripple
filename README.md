@@ -487,4 +487,4 @@ pnpm -w exec monoripple apps/my-server
 
 ## License
 
-ISC
+MIT
